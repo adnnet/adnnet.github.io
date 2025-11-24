@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>答题小程序</title>
+    <!-- （你的 CSS 样式保持不变） -->
+    <style>
+        /* ... 你的原有 style 内容不变 ... */
+        .admin-link {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #ccc;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .admin-link:hover {
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <!-- 开始页面（现在默认不显示） -->
+        <div id="start-screen" class="screen">
+            <h1>答题小程序</h1>
+            <button class="btn" onclick="startQuiz()">开始答题</button>
+            <!-- 管理按钮已移除 -->
+        </div>
+        
+        <!-- 二维码扫码页面（现在作为默认首页） -->
+        <div id="qrcode-screen" class="screen active">
+            <h1>欢迎参加云内控合规日答题活动</h1>
+            <div class="qr-code">
+                <div class="qr-placeholder">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" alt="二维码" width="200" height="200" id="qr-code-img">
+                </div>
+                <p>请扫描二维码开始答题</p>
+                <p id="deploy-note" style="font-size: 12px; color: #FFD700; margin-top: 10px; display: none;">
+                    提示：请将此页面部署到Web服务器以生成有效二维码
+                </p>
+            </div>
+            <button class="btn" onclick="proceedToQuiz()">开始答题</button>
+            <!-- 管理员入口（小字） -->
+            <div class="admin-link" onclick="requestAdminAccess()">管理员入口</div>
+        </div>
+        
+        <!-- 其他页面（quiz-screen, survey-screen, result-screen）保持不变 -->
+
+        <!-- 管理页面（保持不变） -->
+        <div id="admin-screen" class="screen">
+            <h2>题目管理</h2>
+            <!-- ... 原有管理表单内容 ... -->
+            <button class="btn" onclick="showStartScreen()">返回首页</button>
+        </div>
+    </div>
+
+    <script>
+        // === 新增：管理员密码 ===
+        const ADMIN_PASSWORD = "adn1717"; // 👈 你可以改成自己的密码
+
+        // 页面加载时不再显示 start-screen，而是直接显示 qrcode-screen（已在 HTML 中设置 active）
+        window.onload = function() {
+            loadQuestions();
+            updateQuestionsList();
+            generateQRCode();
+        };
+
+        // 覆盖原来的 startQuiz，其实现在不需要了，但保留以防万一
+        function startQuiz() {
+            showScreen('qrcode-screen');
+        }
+
+        // 显示指定屏幕
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // 请求管理员权限
+        function requestAdminAccess() {
+            const input = prompt("请输入管理密码：");
+            if (input === ADMIN_PASSWORD) {
+                showScreen('admin-screen');
+                updateAnswerInputs();
+                updateQuestionsList();
+            } else if (input !== null) {
+                alert("密码错误！");
+            }
+        }
+
+        // 返回首页（指向二维码页，而非原 start-screen）
+        function showStartScreen() {
+            showScreen('qrcode-screen');
+        }
+
+        // ========== 以下是你原有的 JS 逻辑（保持不变）==========
+        let questionBank = [];
+        let gameState = {
+            currentQuestionIndex: 0,
+            selectedQuestions: [],
+            userAnswers: [],
+            score: 0
+        };
+
+        function generateQRCode() {
+            let currentURL = window.location.href;
+            if (currentURL.startsWith('file://')) {
+                currentURL = 'http://your-domain.com/quiz.html';
+                document.getElementById('deploy-note').style.display = 'block';
+            }
+            const qrCodeImg = document.getElementById('qr-code-img');
+            if (qrCodeImg) {
+                qrCodeImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentURL)}`;
+            }
+        }
+
+        function loadQuestions() {
+            const savedQuestions = localStorage.getItem('quizQuestions');
+            if (savedQuestions) {
+                questionBank = JSON.parse(savedQuestions);
+            }
+        }
+
+        function saveQuestions() {
+            localStorage.setItem('quizQuestions', JSON.stringify(questionBank));
+        }
+
+        function proceedToQuiz() {
+            loadQuestions();
+            if (questionBank.length === 0) {
+                alert("题库为空，请先添加题目！");
+                requestAdminAccess(); // 改为调用密码入口
+                return;
+            }
+            gameState.selectedQuestions = getRandomQuestions(questionBank, Math.min(3, questionBank.length));
+            gameState.userAnswers = new Array(gameState.selectedQuestions.length).fill(null);
+            gameState.currentQuestionIndex = 0;
+            gameState.score = 0;
+            showScreen('quiz-screen');
+            loadQuestion();
+        }
+
+        // ...（你原有的其他函数：getRandomQuestions, loadQuestion, selectOption, nextQuestion, checkAnswers, submitSurvey, restartQuiz, updateAnswerInputs, addOption, removeOption, saveQuestion, updateQuestionsList）...
+
+        // 注意：把原来的 showAdminPanel 函数删除或不用，因为我们用 requestAdminAccess 替代
+    </script>
+</body>
+</html>
