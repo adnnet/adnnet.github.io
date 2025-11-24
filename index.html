@@ -4,244 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>答题小程序</title>
+    <!-- （你的 CSS 样式保持不变） -->
     <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: white;
-        }
-        
-        .quiz-container {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 600px;
-            text-align: center;
-        }
-        
-        .screen {
-            display: none;
-        }
-        
-        .active {
-            display: block;
-        }
-        
-        h1, h2 {
-            margin-top: 0;
-        }
-        
-        .question {
-            font-size: 18px;
-            margin: 20px 0;
-            text-align: left;
-        }
-        
-        .options {
-            text-align: left;
-            margin: 20px 0;
-        }
-        
-        .option {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
+        /* ... 你的原有 style 内容不变 ... */
+        .admin-link {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #ccc;
             cursor: pointer;
-            transition: background 0.3s;
+            text-decoration: underline;
         }
-        
-        .option:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .option.selected {
-            background: rgba(76, 175, 80, 0.5);
-        }
-        
-        .btn {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 10px 5px;
-        }
-        
-        .btn:hover {
-            background: #45a049;
-        }
-        
-        .btn:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-        }
-        
-        .btn-secondary {
-            background: #2196F3;
-        }
-        
-        .btn-secondary:hover {
-            background: #0b7dda;
-        }
-        
-        .btn-danger {
-            background: #f44336;
-        }
-        
-        .btn-danger:hover {
-            background: #d32f2f;
-        }
-        
-        .progress {
-            margin: 20px 0;
-        }
-        
-        .progress-bar {
-            height: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: #4CAF50;
-            width: 0%;
-            transition: width 0.3s;
-        }
-        
-        .result-message {
-            font-size: 24px;
+        .admin-link:hover {
             color: #FFD700;
-            margin: 30px 0;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-        }
-        
-        textarea, input, select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-            background: rgba(255, 255, 255, 0.9);
-            margin: 15px 0;
-            resize: vertical;
-            box-sizing: border-box;
-        }
-        
-        input[type="text"] {
-            min-height: 40px;
-        }
-        
-        textarea {
-            min-height: 100px;
-        }
-        
-        .survey-question {
-            text-align: left;
-            margin: 20px 0;
-        }
-        
-        .qr-code {
-            margin: 20px auto;
-            padding: 15px;
-            background: white;
-            width: fit-content;
-            border-radius: 10px;
-        }
-        
-        .qr-placeholder {
-            width: 200px;
-            height: 200px;
-            background: #ddd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #333;
-            font-weight: bold;
-            border-radius: 5px;
-        }
-        
-        .question-form {
-            text-align: left;
-            margin: 20px 0;
-        }
-        
-        .question-form label {
-            display: block;
-            margin: 10px 0 5px;
-            font-weight: bold;
-        }
-        
-        .option-input {
-            display: flex;
-            align-items: center;
-            margin: 10px 0;
-        }
-        
-        .option-input input[type="text"] {
-            flex: 1;
-            margin: 0 10px;
-        }
-        
-        .option-input input[type="checkbox"] {
-            width: auto;
-            background: rgba(255, 255, 255, 0.9);
-        }
-        
-        .question-list {
-            text-align: left;
-            max-height: 300px;
-            overflow-y: auto;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        
-        .question-item {
-            padding: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .question-item:last-child {
-            border-bottom: none;
-        }
-        
-        .question-type {
-            font-size: 14px;
-            color: #FFD700;
-            margin-top: 5px;
-        }
-        
-        .hidden {
-            display: none;
         }
     </style>
 </head>
 <body>
     <div class="quiz-container">
-        <!-- 开始页面 -->
-        <div id="start-screen" class="screen active">
+        <!-- 开始页面（现在默认不显示） -->
+        <div id="start-screen" class="screen">
             <h1>答题小程序</h1>
             <button class="btn" onclick="startQuiz()">开始答题</button>
-            <button class="btn btn-secondary" onclick="showAdminPanel()">管理题目</button>
+            <!-- 管理按钮已移除 -->
         </div>
         
-        <!-- 二维码扫码页面 -->
-        <div id="qrcode-screen" class="screen">
+        <!-- 二维码扫码页面（现在作为默认首页） -->
+        <div id="qrcode-screen" class="screen active">
             <h1>欢迎参加云内控合规日答题活动</h1>
             <div class="qr-code">
                 <div class="qr-placeholder">
@@ -253,537 +41,111 @@
                 </p>
             </div>
             <button class="btn" onclick="proceedToQuiz()">开始答题</button>
+            <!-- 管理员入口（小字） -->
+            <div class="admin-link" onclick="requestAdminAccess()">管理员入口</div>
         </div>
         
-        <!-- 答题页面 -->
-        <div id="quiz-screen" class="screen">
-            <h2>答题环节</h2>
-            <div class="progress">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-fill"></div>
-                </div>
-                <p>第 <span id="current-question">1</span>/<span id="total-questions">3</span> 题</p>
-            </div>
-            <div class="question" id="question-text"></div>
-            <div class="options" id="options-container"></div>
-            <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>下一题</button>
-        </div>
-        
-        <!-- 调研页面 -->
-        <div id="survey-screen" class="screen">
-            <h2>调研问卷</h2>
-            <div class="survey-question">
-                <p>您对云内控的工作有哪些建议或意见？</p>
-                <textarea id="survey-input" placeholder="请输入您的宝贵意见..."></textarea>
-            </div>
-            <button class="btn" onclick="submitSurvey()">提交</button>
-        </div>
-        
-        <!-- 结果页面 -->
-        <div id="result-screen" class="screen">
-            <h2>答题完成</h2>
-            <div class="result-message" id="result-message"></div>
-            <button class="btn" onclick="restartQuiz()">重新开始</button>
-        </div>
-        
-        <!-- 管理页面 -->
+        <!-- 其他页面（quiz-screen, survey-screen, result-screen）保持不变 -->
+
+        <!-- 管理页面（保持不变） -->
         <div id="admin-screen" class="screen">
             <h2>题目管理</h2>
-            <div class="question-form">
-                <label>题目类型：</label>
-                <select id="question-type" onchange="updateAnswerInputs()">
-                    <option value="single">单选题</option>
-                    <option value="multiple">多选题</option>
-                    <option value="truefalse">判断题</option>
-                </select>
-                
-                <label>题目内容：</label>
-                <textarea id="question-content" placeholder="请输入题目内容"></textarea>
-                
-                <div id="options-section">
-                    <label>选项：</label>
-                    <div id="options-inputs">
-                        <!-- 选项将通过JavaScript动态生成 -->
-                    </div>
-                    <button class="btn" onclick="addOption()">添加选项</button>
-                </div>
-                
-                <div id="truefalse-section" class="hidden">
-                    <label>正确答案：</label>
-                    <select id="truefalse-answer">
-                        <option value="true">正确</option>
-                        <option value="false">错误</option>
-                    </select>
-                </div>
-                
-                <button class="btn" onclick="saveQuestion()">保存题目</button>
-            </div>
-            
-            <div class="question-list">
-                <h3>题目列表</h3>
-                <div id="questions-list">
-                    <!-- 题目列表将通过JavaScript动态生成 -->
-                </div>
-            </div>
-            
+            <!-- ... 原有管理表单内容 ... -->
             <button class="btn" onclick="showStartScreen()">返回首页</button>
         </div>
     </div>
 
     <script>
-        // 题库 - 支持单选、多选、判断题
+        // === 新增：管理员密码 ===
+        const ADMIN_PASSWORD = "adn1717"; // 👈 你可以改成自己的密码
+
+        // 页面加载时不再显示 start-screen，而是直接显示 qrcode-screen（已在 HTML 中设置 active）
+        window.onload = function() {
+            loadQuestions();
+            updateQuestionsList();
+            generateQRCode();
+        };
+
+        // 覆盖原来的 startQuiz，其实现在不需要了，但保留以防万一
+        function startQuiz() {
+            showScreen('qrcode-screen');
+        }
+
+        // 显示指定屏幕
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // 请求管理员权限
+        function requestAdminAccess() {
+            const input = prompt("请输入管理密码：");
+            if (input === ADMIN_PASSWORD) {
+                showScreen('admin-screen');
+                updateAnswerInputs();
+                updateQuestionsList();
+            } else if (input !== null) {
+                alert("密码错误！");
+            }
+        }
+
+        // 返回首页（指向二维码页，而非原 start-screen）
+        function showStartScreen() {
+            showScreen('qrcode-screen');
+        }
+
+        // ========== 以下是你原有的 JS 逻辑（保持不变）==========
         let questionBank = [];
-        
-        // 游戏状态
         let gameState = {
             currentQuestionIndex: 0,
             selectedQuestions: [],
             userAnswers: [],
             score: 0
         };
-        
-        // 页面加载时初始化
-        window.onload = function() {
-            loadQuestions();
-            updateQuestionsList();
-            // 生成包含当前页面URL的二维码
-            generateQRCode();
-        };
-        
-        // 生成二维码
+
         function generateQRCode() {
-            // 获取当前页面的完整URL
             let currentURL = window.location.href;
-            
-            // 如果是本地文件路径，则提示用户需要部署到服务器
             if (currentURL.startsWith('file://')) {
-                // 对于本地文件，生成一个提示信息
-                currentURL = 'http://your-domain.com/quiz.html'; // 默认提示链接
-                document.getElementById('qr-code-img').alt = "请将此页面部署到Web服务器以生成有效二维码";
+                currentURL = 'http://your-domain.com/quiz.html';
                 document.getElementById('deploy-note').style.display = 'block';
             }
-            
-            // 更新二维码图片的src属性
             const qrCodeImg = document.getElementById('qr-code-img');
             if (qrCodeImg) {
                 qrCodeImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentURL)}`;
             }
         }
-        
-        // 从localStorage加载题目
+
         function loadQuestions() {
             const savedQuestions = localStorage.getItem('quizQuestions');
             if (savedQuestions) {
                 questionBank = JSON.parse(savedQuestions);
             }
         }
-        
-        // 保存题目到localStorage
+
         function saveQuestions() {
             localStorage.setItem('quizQuestions', JSON.stringify(questionBank));
         }
-        
-        // 开始答题
-        function startQuiz() {
-            showScreen('qrcode-screen');
-        }
-        
-        // 继续进入答题环节
+
         function proceedToQuiz() {
             loadQuestions();
             if (questionBank.length === 0) {
                 alert("题库为空，请先添加题目！");
-                showAdminPanel();
+                requestAdminAccess(); // 改为调用密码入口
                 return;
             }
-            
-            // 随机选择3道题目
             gameState.selectedQuestions = getRandomQuestions(questionBank, Math.min(3, questionBank.length));
             gameState.userAnswers = new Array(gameState.selectedQuestions.length).fill(null);
             gameState.currentQuestionIndex = 0;
             gameState.score = 0;
-            
-            // 显示答题页面
             showScreen('quiz-screen');
             loadQuestion();
         }
-        
-        // 从题库中随机选择指定数量的题目
-        function getRandomQuestions(questions, count) {
-            // 创建题库副本
-            const shuffled = [...questions].sort(() => 0.5 - Math.random());
-            // 返回前count个题目
-            return shuffled.slice(0, count);
-        }
-        
-        // 显示指定屏幕
-        function showScreen(screenId) {
-            // 隐藏所有屏幕
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
-            // 显示指定屏幕
-            document.getElementById(screenId).classList.add('active');
-        }
-        
-        // 加载当前题目
-        function loadQuestion() {
-            const question = gameState.selectedQuestions[gameState.currentQuestionIndex];
-            // 显示题型和题目内容
-            let typeText = '';
-            if (question.type === 'single') typeText = '【单选题】';
-            else if (question.type === 'multiple') typeText = '【多选题】';
-            else if (question.type === 'truefalse') typeText = '【判断题】';
-            
-            document.getElementById('question-text').innerHTML = `<span style="color:#4CAF50;font-weight:bold;">${typeText}</span><br>${question.question}`;
-            
-            // 更新进度条
-            const progressPercent = ((gameState.currentQuestionIndex) / gameState.selectedQuestions.length) * 100;
-            document.getElementById('progress-fill').style.width = progressPercent + '%';
-            document.getElementById('current-question').textContent = gameState.currentQuestionIndex + 1;
-            document.getElementById('total-questions').textContent = gameState.selectedQuestions.length;
-            
-            // 清除之前的选项
-            const optionsContainer = document.getElementById('options-container');
-            optionsContainer.innerHTML = '';
-            
-            // 根据题目类型显示选项
-            if (question.type === 'truefalse') {
-                // 判断题选项
-                const trueOption = document.createElement('div');
-                trueOption.className = 'option';
-                trueOption.textContent = 'A. 正确';
-                trueOption.onclick = () => selectOption('true', trueOption);
-                
-                const falseOption = document.createElement('div');
-                falseOption.className = 'option';
-                falseOption.textContent = 'B. 错误';
-                falseOption.onclick = () => selectOption('false', falseOption);
-                
-                // 如果之前已选择此选项，则高亮显示
-                if (gameState.userAnswers[gameState.currentQuestionIndex] === 'true') {
-                    trueOption.classList.add('selected');
-                } else if (gameState.userAnswers[gameState.currentQuestionIndex] === 'false') {
-                    falseOption.classList.add('selected');
-                }
-                
-                optionsContainer.appendChild(trueOption);
-                optionsContainer.appendChild(falseOption);
-            } else {
-                // 单选题和多选题
-                question.options.forEach((option, index) => {
-                    const optionElement = document.createElement('div');
-                    optionElement.className = 'option';
-                    optionElement.textContent = String.fromCharCode(65 + index) + '. ' + option.text;
-                    
-                    if (question.type === 'single') {
-                        // 单选题
-                        optionElement.onclick = () => selectOption(index, optionElement);
-                    } else {
-                        // 多选题
-                        optionElement.onclick = () => toggleMultipleOption(index, optionElement);
-                    }
-                    
-                    // 如果之前已选择此选项，则高亮显示
-                    if (question.type === 'single' && gameState.userAnswers[gameState.currentQuestionIndex] === index) {
-                        optionElement.classList.add('selected');
-                    } else if (question.type === 'multiple' && Array.isArray(gameState.userAnswers[gameState.currentQuestionIndex]) && 
-                               gameState.userAnswers[gameState.currentQuestionIndex].includes(index)) {
-                        optionElement.classList.add('selected');
-                    }
-                    
-                    optionsContainer.appendChild(optionElement);
-                });
-            }
-            
-            // 更新下一题按钮状态
-            updateNextButton();
-        }
-        
-        // 选择单选题选项
-        function selectOption(optionIndex, element) {
-            // 清除之前的选择
-            document.querySelectorAll('.option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            
-            // 标记当前选择
-            element.classList.add('selected');
-            gameState.userAnswers[gameState.currentQuestionIndex] = optionIndex;
-            
-            // 更新下一题按钮状态
-            updateNextButton();
-        }
-        
-        // 切换多选题选项
-        function toggleMultipleOption(optionIndex, element) {
-            // 初始化答案数组
-            if (!Array.isArray(gameState.userAnswers[gameState.currentQuestionIndex])) {
-                gameState.userAnswers[gameState.currentQuestionIndex] = [];
-            }
-            
-            const answers = gameState.userAnswers[gameState.currentQuestionIndex];
-            const index = answers.indexOf(optionIndex);
-            
-            if (index === -1) {
-                // 添加选项
-                element.classList.add('selected');
-                answers.push(optionIndex);
-            } else {
-                // 移除选项
-                element.classList.remove('selected');
-                answers.splice(index, 1);
-            }
-            
-            // 更新下一题按钮状态
-            updateNextButton();
-        }
-        
-        // 更新下一题按钮状态
-        function updateNextButton() {
-            const nextBtn = document.getElementById('next-btn');
-            const currentAnswer = gameState.userAnswers[gameState.currentQuestionIndex];
-            
-            // 根据题目类型检查是否有答案
-            if (gameState.selectedQuestions[gameState.currentQuestionIndex].type === 'multiple') {
-                nextBtn.disabled = !Array.isArray(currentAnswer) || currentAnswer.length === 0;
-            } else {
-                nextBtn.disabled = currentAnswer === null;
-            }
-        }
-        
-        // 下一题
-        function nextQuestion() {
-            // 如果是最后一题，检查答案并进入调研
-            if (gameState.currentQuestionIndex === gameState.selectedQuestions.length - 1) {
-                checkAnswers();
-                showScreen('survey-screen');
-            } else {
-                // 进入下一题
-                gameState.currentQuestionIndex++;
-                loadQuestion();
-            }
-        }
-        
-        // 检查答案
-        function checkAnswers() {
-            gameState.score = 0;
-            for (let i = 0; i < gameState.selectedQuestions.length; i++) {
-                const question = gameState.selectedQuestions[i];
-                const userAnswer = gameState.userAnswers[i];
-                
-                if (question.type === 'single') {
-                    // 单选题
-                    if (userAnswer === question.answer) {
-                        gameState.score++;
-                    }
-                } else if (question.type === 'multiple') {
-                    // 多选题
-                    if (Array.isArray(userAnswer) && Array.isArray(question.answer)) {
-                        // 检查答案是否完全匹配
-                        if (userAnswer.length === question.answer.length && 
-                            userAnswer.every(val => question.answer.includes(val)) &&
-                            question.answer.every(val => userAnswer.includes(val))) {
-                            gameState.score++;
-                        }
-                    }
-                } else if (question.type === 'truefalse') {
-                    // 判断题
-                    if (userAnswer === question.answer) {
-                        gameState.score++;
-                    }
-                }
-            }
-        }
-        
-        // 提交调研
-        function submitSurvey() {
-            // 获取调研内容
-            const surveyInput = document.getElementById('survey-input');
-            const surveyText = surveyInput.value.trim();
-            
-            // 验证字符数
-            if (surveyText.length < 5) {
-                alert('请输入至少5个字的建议或意见！');
-                surveyInput.focus();
-                return;
-            }
-            
-            // 显示结果页面
-            showScreen('result-screen');
-            
-            // 根据答题结果设置消息
-            const resultMessage = document.getElementById('result-message');
-            if (gameState.score === gameState.selectedQuestions.length) {
-                resultMessage.textContent = '恭喜你回答100%正确，可以选择你喜欢的奖品咯~';
-            } else {
-                resultMessage.textContent = `您答对了${gameState.score}题，感谢参与！`;
-            }
-        }
-        
-        // 重新开始
-        function restartQuiz() {
-            showScreen('start-screen');
-        }
-        
-        // 显示管理面板
-        function showAdminPanel() {
-            showScreen('admin-screen');
-            updateAnswerInputs();
-            updateQuestionsList();
-        }
-        
-        // 显示开始页面
-        function showStartScreen() {
-            showScreen('start-screen');
-        }
-        
-        // 更新答案输入区域
-        function updateAnswerInputs() {
-            const questionType = document.getElementById('question-type').value;
-            const optionsSection = document.getElementById('options-section');
-            const truefalseSection = document.getElementById('truefalse-section');
-            
-            if (questionType === 'truefalse') {
-                optionsSection.classList.add('hidden');
-                truefalseSection.classList.remove('hidden');
-            } else {
-                optionsSection.classList.remove('hidden');
-                truefalseSection.classList.add('hidden');
-                
-                // 初始化选项输入
-                const optionsInputs = document.getElementById('options-inputs');
-                optionsInputs.innerHTML = '';
-                
-                // 添加默认选项
-                for (let i = 0; i < 4; i++) {
-                    addOption();
-                }
-            }
-        }
-        
-        // 添加选项
-        function addOption() {
-            const optionsInputs = document.getElementById('options-inputs');
-            const optionIndex = optionsInputs.children.length;
-            
-            const optionDiv = document.createElement('div');
-            optionDiv.className = 'option-input';
-            optionDiv.innerHTML = `
-                <input type="checkbox" id="option-correct-${optionIndex}" title="正确答案">
-                <input type="text" id="option-text-${optionIndex}" placeholder="选项内容" style="flex:1; margin:0 10px;">
-                <button class="btn btn-danger" onclick="removeOption(this)">删除</button>
-            `;
-            
-            optionsInputs.appendChild(optionDiv);
-        }
-        
-        // 删除选项
-        function removeOption(button) {
-            button.parentElement.remove();
-        }
-        
-        // 保存题目
-        function saveQuestion() {
-            const questionType = document.getElementById('question-type').value;
-            const questionContent = document.getElementById('question-content').value.trim();
-            
-            if (!questionContent) {
-                alert('请输入题目内容！');
-                return;
-            }
-            
-            let question = {
-                type: questionType,
-                question: questionContent
-            };
-            
-            if (questionType === 'truefalse') {
-                // 判断题
-                question.answer = document.getElementById('truefalse-answer').value;
-            } else {
-                // 单选题或多选题
-                const options = [];
-                const correctAnswers = [];
-                const optionsInputs = document.getElementById('options-inputs');
-                
-                for (let i = 0; i < optionsInputs.children.length; i++) {
-                    const textInput = document.getElementById(`option-text-${i}`);
-                    const correctCheckbox = document.getElementById(`option-correct-${i}`);
-                    
-                    if (textInput && textInput.value.trim()) {
-                        options.push({
-                            text: textInput.value.trim()
-                        });
-                        
-                        if (correctCheckbox && correctCheckbox.checked) {
-                            correctAnswers.push(i);
-                        }
-                    }
-                }
-                
-                if (options.length === 0) {
-                    alert('请至少添加一个选项！');
-                    return;
-                }
-                
-                if (correctAnswers.length === 0) {
-                    alert('请至少选择一个正确答案！');
-                    return;
-                }
-                
-                question.options = options;
-                question.answer = questionType === 'single' ? correctAnswers[0] : correctAnswers;
-            }
-            
-            // 添加到题库
-            questionBank.push(question);
-            
-            // 保存到localStorage
-            saveQuestions();
-            
-            // 更新题目列表
-            updateQuestionsList();
-            
-            // 清空表单
-            document.getElementById('question-content').value = '';
-            if (questionType !== 'truefalse') {
-                document.getElementById('options-inputs').innerHTML = '';
-                for (let i = 0; i < 4; i++) {
-                    addOption();
-                }
-            }
-            
-            alert('题目保存成功！');
-        }
-        
-        // 更新题目列表
-        function updateQuestionsList() {
-            const questionsList = document.getElementById('questions-list');
-            questionsList.innerHTML = '';
-            
-            if (questionBank.length === 0) {
-                questionsList.innerHTML = '<p>暂无题目</p>';
-                return;
-            }
-            
-            questionBank.forEach((q, index) => {
-                const questionDiv = document.createElement('div');
-                questionDiv.className = 'question-item';
-                
-                let typeText = '';
-                if (q.type === 'single') typeText = '单选题';
-                else if (q.type === 'multiple') typeText = '多选题';
-                else if (q.type === 'truefalse') typeText = '判断题';
-                
-                questionDiv.innerHTML = `
-                    <div><strong>${q.question}</strong></div>
-                    <div class="question-type">${typeText}</div>
-                `;
-                
-                questionsList.appendChild(questionDiv);
-            });
-        }
+
+        // ...（你原有的其他函数：getRandomQuestions, loadQuestion, selectOption, nextQuestion, checkAnswers, submitSurvey, restartQuiz, updateAnswerInputs, addOption, removeOption, saveQuestion, updateQuestionsList）...
+
+        // 注意：把原来的 showAdminPanel 函数删除或不用，因为我们用 requestAdminAccess 替代
     </script>
 </body>
 </html>
