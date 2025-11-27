@@ -9,7 +9,7 @@
             margin: 0;
             padding: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Arial', sans-serif;
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -247,7 +247,7 @@
             <h2>管理员登录</h2>
             <div style="text-align: left; margin: 20px 0;">
                 <label>请输入管理员密码：</label>
-                <input type="password" id="admin-password" placeholder="密码" style="width: 100%; padding: 10px; margin: 10px 0;">
+                <input type="password" id="admin-password" placeholder="密码" style="width: 100%; padding: 10px; margin: 10px 0;" autocomplete="new-password">
             </div>
             <button class="btn" onclick="checkAdminPassword()">登录</button>
             <button class="btn btn-secondary" onclick="showStartScreen()" style="margin-top: 10px;">返回</button>
@@ -287,7 +287,7 @@
             <h2>调研问卷</h2>
             <div class="survey-question">
                 <p>您对云内控的工作有哪些建议或意见？</p>
-                <textarea id="survey-input" placeholder="请输入您的宝贵意见..."></textarea>
+                <textarea id="survey-input" placeholder="请输入您的宝贵意见..." autocomplete="off"></textarea>
             </div>
             <button class="btn" onclick="submitSurvey()">提交</button>
         </div>
@@ -302,7 +302,7 @@
         <!-- 管理员主界面 -->
         <div id="admin-main-screen" class="screen">
             <h2>管理员功能</h2>
-            <button class="btn" onclick="startQuizAsAdmin()">开始答题</button>
+            <button class="btn" onclick="showScreen('qrcode-screen')">开始答题</button>
             <button class="btn" onclick="showAdminPanel()" style="background-color: #2196F3;">题目管理</button>
             <button class="btn" onclick="logoutAdmin()" style="background-color: #f44336;">退出登录</button>
         </div>
@@ -354,6 +354,7 @@
                 </div>
             </div>
             
+            <button class="btn" onclick="showScreen('qrcode-screen')">开始答题</button>
             <button class="btn" onclick="exportSuggestions()">导出所有建议</button>
             <button class="btn" onclick="showAdminMainScreen()">返回管理员主界面</button>
         </div>
@@ -377,7 +378,23 @@
             updateQuestionsList();
             // 生成包含当前页面URL的二维码
             generateQRCode();
+            // 清除可能的自动填充内容
+            clearAutoFill();
         };
+                    
+        // 清除可能的自动填充内容
+        function clearAutoFill() {
+            const adminPassword = document.getElementById('admin-password');
+            const surveyInput = document.getElementById('survey-input');
+                        
+            if (adminPassword) {
+                adminPassword.value = '';
+            }
+                        
+            if (surveyInput) {
+                surveyInput.value = '';
+            }
+        }
         
         // 生成二维码
         function generateQRCode() {
@@ -426,7 +443,7 @@
                 },
                 {
                     type: 'truefalse',
-                    question: '业务正常开展过程中的常规损耗，例如数据中心资产处置损失，需计入资损事件定义吗？',
+                    question: '业务正常开展过程中的常规损耗，例如数据中心资产处置损失，需计入资损事件。',
                     answer: 'false'
                 },
                 {
@@ -464,12 +481,12 @@
                 },
                 {
                     type: 'truefalse',
-                    question: '云内控推送的风险任务工单处理率会影响内控对事业部的评价吗？',
+                    question: '云内控推送的风险任务工单处理率会影响内控对事业部的评价。',
                     answer: 'true'
                 },
                 {
                     type: 'truefalse',
-                    question: '资损事件如果上报不及时，会影响内控对事业部的评价吗？',
+                    question: '资损事件如果上报不及时，会影响内控对事业部的评价。',
                     answer: 'true'
                 },
                 {
@@ -497,17 +514,12 @@
         function startQuiz() {
             // 检查是否已登录为管理员
             if (sessionStorage.getItem('isAdmin') === 'true') {
-                // 管理员显示二维码页面
-                showScreen('qrcode-screen');
+                // 管理员直接进入答题环节，跳过二维码页面
+                proceedToQuiz();
             } else {
                 // 普通用户直接进入答题环节，跳过二维码页面
                 proceedToQuiz();
             }
-        }
-        
-        // 管理员开始答题
-        function startQuizAsAdmin() {
-            showScreen('qrcode-screen');
         }
         
         // 显示管理员主界面
@@ -747,7 +759,20 @@
             // 根据答题结果设置消息
             const resultMessage = document.getElementById('result-message');
             if (gameState.score === gameState.selectedQuestions.length) {
-                resultMessage.textContent = '恭喜你回答100%正确，可以选择你喜欢的奖品咯~';
+                // 定义奖品列表和对应的权重
+                const prizes = [
+                    { name: '笔记本支架', weight: 30 },
+                    { name: '大鼠标垫', weight: 32 },
+                    { name: '运动毛巾', weight: 32 },
+                    { name: '弹力带', weight: 40 },
+                    { name: '野餐垫', weight: 12 },
+                    { name: '手机支架', weight: 40 },
+                    { name: '内控定制杜邦袋', weight: 160 },
+                    { name: '趣味打工人亚克力摆件', weight: 200 }
+                ];
+                // 根据权重随机选择一个奖品
+                const randomPrize = weightedRandom(prizes);
+                resultMessage.textContent = `恭喜你回答100%正确，获得${randomPrize}~`;
             } else {
                 resultMessage.textContent = `您答对了${gameState.score}题，感谢参与！`;
             }
@@ -790,11 +815,41 @@
         // 重新开始
         function restartQuiz() {
             showScreen('start-screen');
+            // 清除可能的输入
+            clearInputs();
+        }
+        
+        // 加权随机选择函数
+        function weightedRandom(items) {
+            // 计算总权重
+            let totalWeight = 0;
+            for (let i = 0; i < items.length; i++) {
+                totalWeight += items[i].weight;
+            }
+            
+            // 生成一个随机数
+            let random = Math.random() * totalWeight;
+            
+            // 根据权重选择项目
+            for (let i = 0; i < items.length; i++) {
+                if (random < items[i].weight) {
+                    return items[i].name;
+                }
+                random -= items[i].weight;
+            }
+            
+            // 如果没有匹配到（理论上不应该发生），返回第一个项目
+            return items[0].name;
         }
         
         // 显示管理员登录页面
         function showAdminLogin() {
             showScreen('admin-login-screen');
+            // 清除密码输入框
+            const adminPassword = document.getElementById('admin-password');
+            if (adminPassword) {
+                adminPassword.value = '';
+            }
         }
         
         // 检查管理员密码
@@ -914,6 +969,22 @@
             // 清除管理员标记
             sessionStorage.removeItem('isAdmin');
             showScreen('start-screen');
+            // 清除可能的输入
+            clearInputs();
+        }
+        
+        // 清除可能的输入
+        function clearInputs() {
+            const adminPassword = document.getElementById('admin-password');
+            const surveyInput = document.getElementById('survey-input');
+            
+            if (adminPassword) {
+                adminPassword.value = '';
+            }
+            
+            if (surveyInput) {
+                surveyInput.value = '';
+            }
         }
         
         // 更新答案输入区域
